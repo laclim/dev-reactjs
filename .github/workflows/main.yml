@@ -24,4 +24,4 @@ jobs:
           SOURCE: ""
           # Arguments to pass to rsync
           # ARGS: |
-          #   cd dev-reactjs
+
