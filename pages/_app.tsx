@@ -118,7 +118,7 @@ MyApp.getInitialProps = async ({ ctx }) => {
         })
         .then((result) => {
           loggedIn = true;
-          console.log(result);
+
           displayName = result.data.me.profile.name;
           profileImage = result.data.me.profile.profileImage;
         })

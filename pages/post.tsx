@@ -5,6 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import { gql, useMutation } from "@apollo/client";
 import Editor from "../src/component/Editor";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 import {
   Box,
   Button,
@@ -18,7 +19,6 @@ function Post() {
     <div className="container">
       <Head>
         <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Index />
     </div>
@@ -34,6 +34,7 @@ interface MyFormValues {
 const ADD_POST = gql`
   mutation CreatePostMutation($input: PostInput) {
     createPost(input: $input) {
+      slug
       id
     }
   }
@@ -50,20 +51,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 function Index() {
   const [content, setContent] = useState([]);
+  const [tagList, setTagList] = useState([]);
   const classes = useStyles();
-
+  const router = useRouter();
   const { register, handleSubmit, errors } = useForm({
     // defaultValues: { title, tag },
   });
 
   const onSubmit = (data) => {
-    data = { ...data, content, tag: [data.tag] };
+    console.log(content);
+    data = { ...data, content, tag: tagList, status: true };
 
-    addPost({ variables: { input: data } });
+    addPost({ variables: { input: data } }).then((res) => {
+      const { slug } = res.data.createPost;
+      router.push("/" + slug);
+    });
   };
   const [addPost, { data }] = useMutation(ADD_POST);
   const onDraft = (data) => {
-    data = { ...data, content, tag: [data.tag], status: false };
+    data = { ...data, content, tag: tagList, status: false };
     addPost({ variables: { input: data } });
   };
   return (
@@ -73,12 +79,16 @@ function Index() {
         setContent={setContent}
         onSubmit={onSubmit}
         register={register}
+        errors={errors}
+        tagList={tagList}
+        setTagList={setTagList}
       >
         <React.Fragment>
           <div className={classes.buttons}>
             <Button
               variant="contained"
               name="draft"
+              type="submit"
               onClick={handleSubmit(onDraft)}
               className={classes.button}
             >

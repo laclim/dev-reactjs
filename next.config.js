@@ -1,4 +1,6 @@
-module.exports = {
+const path = require('path');
+const withImages = require('next-images')
+module.exports = withImages({
   env: {
     customKey: "my-value",
   },
@@ -11,4 +13,10 @@ module.exports = {
     CLOUDFRONT_URL: process.env.CLOUDFRONT_URL,
     RESIZE_CLOUDFRONT_URL: process.env.RESIZE_CLOUDFRONT_URL
   },
-};
+  exclude: path.resolve(__dirname, 'src/images/svg'),
+  webpack(config, options) {
+    return config
+  }
+
+});
+

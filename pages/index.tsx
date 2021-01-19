@@ -1,8 +1,15 @@
 import { gql, useQuery } from "@apollo/client";
-import { Container, Grid, makeStyles, Paper } from "@material-ui/core";
+import {
+  Container,
+  Grid,
+  makeStyles,
+  Paper,
+  Typography,
+} from "@material-ui/core";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import Posts from "../src/component/Posts";
+import TagList from "../src/component/TagList";
 
 const GET_POSTS = gql`
   query {
@@ -14,8 +21,13 @@ const GET_POSTS = gql`
       slug
       createdBy {
         name
+        profileImage
       }
       content
+      description
+    }
+    tags {
+      name
     }
   }
 `;
@@ -23,10 +35,6 @@ const GET_POSTS = gql`
 function Home() {
   return (
     <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <Index />
     </div>
   );
@@ -55,13 +63,17 @@ function Index() {
   const { loading, error, data } = useQuery(GET_POSTS);
   // if (loading) return <React.Fragment>Loading...</React.Fragment>;
   // if (error) return <React.Fragment>Error! {error.message}</React.Fragment>;
+  if (!loading) console.log(data);
   const classes = useStyles();
   return (
     <React.Fragment>
       <Container maxWidth="lg">
         <Grid container spacing={1}>
           <Grid item lg={3}>
-            <Paper className={classes.paper}>g2</Paper>
+            <Paper className={classes.paper}>
+              <Typography variant="h6">Trending Tags</Typography>
+              {!loading && <TagList data={data.tags}></TagList>}
+            </Paper>
           </Grid>
           <Grid item lg={7}>
             {!loading && <Posts data={data.posts}></Posts>}

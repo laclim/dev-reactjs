@@ -1,10 +1,11 @@
 import axios from "axios";
 import getConfig from "next/config";
+import { useEffect, useReducer } from "react";
 const { publicRuntimeConfig } = getConfig();
 export const uploadImage = async (file) => {
   let formData = new FormData();
   formData.append("image", file);
-  console.log(">> formData >> ", formData);
+
   try {
     if (file) {
       const res = await axios.post(
@@ -33,9 +34,7 @@ export const getS3Image = (key, width?, height?) => {
         publicRuntimeConfig.RESIZE_CLOUDFRONT_URL
       }/${width}x${height}-${key.replace(/\//g, "-")}`;
     } else {
-      return `${
-        publicRuntimeConfig.RESIZE_CLOUDFRONT_URL
-      }/300x300-${key.replace(/\//g, "-")}`;
+      return `${publicRuntimeConfig.CLOUDFRONT_URL}/${key}`;
     }
   }
 

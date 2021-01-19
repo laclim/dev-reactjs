@@ -19,6 +19,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { getS3Image } from "../helper";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -60,7 +61,11 @@ function PostCard({ post }) {
     <Card className={classes.card}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
+          <Avatar
+            aria-label="recipe"
+            className={classes.avatar}
+            src={getS3Image(post.createdBy.profileImage, 150, 150)}
+          >
             {post.createdBy.name.charAt(0).toUpperCase()}
           </Avatar>
         }
@@ -84,9 +89,7 @@ function PostCard({ post }) {
               {post.title}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              This impressive paella is a perfect party dish and a fun meal to
-              cook together with your guests. Add 1 cup of frozen peas along
-              with the mussels, if you like.
+              {post.description}
             </Typography>
           </CardContent>
         </CardActionArea>

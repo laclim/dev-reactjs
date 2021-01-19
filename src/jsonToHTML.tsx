@@ -33,11 +33,54 @@ const useStyles = (props) => {
       width: "100%",
       boxSizing: "border-box",
     },
+    link_tool__content: {
+      display: "block",
+      padding: "25px",
+      borderRadius: "2px",
+      boxShadow: "0 0 0 2px #fff",
+      color: "initial !important",
+      textDecoration: "none !important",
+      background: "white",
+    },
+    link_tool__image: {
+      backgroundPosition: "center center",
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      margin: "0 0 0 30px",
+      width: "65px",
+      height: "65px",
+      borderRadius: "3px",
+      float: "right",
+    },
+    link_tool__title: {
+      fontSize: "17px",
+      fontWeight: 600,
+      lineHeight: "1.5em",
+      margin: "0 0 10px 0",
+    },
+    link_tool__description: {
+      margin: "0 0 20px 0",
+      fontSize: "15px",
+      lineHeight: "1.55em",
+      display: "-webkit-box",
+      WebkitLineClamp: 3,
+      WebkitBoxOrient: "vertical",
+      overflow: "hidden",
+    },
+    link_tool__anchor: {
+      display: "block",
+      fontSize: "15px",
+      lineHeight: "1em",
+      color: "#888",
+      border: 0,
+      padding: 0,
+    },
   }));
 };
 
-export const jsonToHTML = (post) =>
-  post.content.map((el, i) => parseBlock(el, i));
+export const jsonToHTML = (post) => {
+  if (post.content) return post.content.map((el, i) => parseBlock(el, i));
+};
 
 function parseBlock(block: any, index: number) {
   const classes = useStyles({
@@ -53,20 +96,22 @@ function parseBlock(block: any, index: number) {
             <LazyLoad>
               <img
                 className={classes.image_tool__imagepicture}
-                src={block.data.file.url}
+                src={block.data?.file?.url}
               />
             </LazyLoad>
           </div>
           {block.data.caption && (
-            <div className={classes.image_tool__caption}>
-              {block.data.caption}
-            </div>
+            <div
+              className={classes.image_tool__caption}
+              dangerouslySetInnerHTML={createMarkup(block.data.caption)}
+            />
           )}
         </React.Fragment>
       );
       break;
     case "paragraph":
-      el = <p>{block.data.text}</p>;
+      // el = <p>{block.data.text}</p>;
+      el = <p dangerouslySetInnerHTML={createMarkup(block.data.text)} />;
       break;
     case "heading":
       const { level, text } = block.data;
@@ -84,15 +129,42 @@ function parseBlock(block: any, index: number) {
             width="100%"
           ></iframe>
           {block.data.caption && (
-            <div className={classes.image_tool__caption}>
-              {block.data.caption}
-            </div>
+            <div
+              className={classes.image_tool__caption}
+              dangerouslySetInnerHTML={createMarkup(block.data.caption)}
+            />
           )}
         </React.Fragment>
       );
       break;
-    // case "image":
-    //   break;
+    case "linkTool":
+      el = (
+        <React.Fragment>
+          <a
+            className={classes.link_tool__content}
+            target="_blank"
+            rel="nofollow noindex noreferrer"
+            href={block?.data?.link}
+          >
+            <div
+              className={classes.link_tool__image}
+              style={{
+                backgroundImage: `url(${block?.data?.meta?.image?.url})`,
+              }}
+            ></div>
+            <div className={classes.link_tool__title}>
+              {block.data.meta.title}
+            </div>
+            <p className={classes.link_tool__description}>
+              {block.data.meta.description}
+            </p>
+            <span className={classes.link_tool__anchor}>
+              {block.data.meta.url}
+            </span>
+          </a>
+        </React.Fragment>
+      );
+      break;
     // case "image":
     //   break;
 
@@ -105,4 +177,8 @@ function parseBlock(block: any, index: number) {
       {el}
     </div>
   );
+}
+
+function createMarkup(data) {
+  return { __html: data };
 }

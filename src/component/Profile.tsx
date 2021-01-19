@@ -5,13 +5,9 @@ import { useContextDispatch } from "../context";
 export default function Profile() {
   const [profile, setProfile] = useState({ phoneNumber: "", displayName: "" });
   const dispatch = useContextDispatch();
-  useEffect(() => {
- 
-  }, []);
+  useEffect(() => {}, []);
 
-  function handleSave() {
-    
-  }
+  function handleSave() {}
 
   return (
     <div>

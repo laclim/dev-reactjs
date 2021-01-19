@@ -10,13 +10,18 @@ import { useForm } from "react-hook-form";
 import Head from "next/head";
 import { Button } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import { useRouter } from "next/router";
+
 const GET_POST = gql`
   query getPost($slug: String!) {
     post(slug: $slug) {
       id
       title
       content
-      tag
+      tag {
+        name
+      }
+      slug
       createdBy {
         name
       }
@@ -46,25 +51,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function EditPost({ post, isEditPost }) {
+  const router = useRouter();
   const classes = useStyles();
-  const [content, setContent] = useState(post.content);
+  const [content, setContent] = useState(post?.content);
+
   if (!isEditPost) {
     return <Error statusCode={404}></Error>;
   }
   const { title, tag } = post;
+  const tagName = tag.map((el) => el.name);
+  const [tagList, setTagList] = useState(tagName);
   const { register, handleSubmit, errors } = useForm({
-    defaultValues: { title, tag },
+    defaultValues: { title, tag: tagName },
   });
 
   const onSubmit = (data) => {
-    data = { ...data, content, tag: [data.tag] };
-
-    updatePost({ variables: { id: post.id, input: data } });
+    data = { ...data, content, tag: tagList };
+    console.log(data);
+    updatePost({ variables: { id: post.id, input: data } }).then(() => {
+      router.push("/" + post.slug);
+    });
   };
   const [updatePost, { data }] = useMutation(UPDATE_POST);
   const onDraft = (data) => {
-    data = { ...data, content, tag: [data.tag], status: false };
-    updatePost({ variables: { input: data } });
+    data = { ...data, content, tag: tagList, status: false };
+    updatePost({ variables: { id: post.id, input: data } });
   };
 
   return (
@@ -79,7 +90,8 @@ function EditPost({ post, isEditPost }) {
         onSubmit={onSubmit}
         register={register}
         title={post.title}
-        tag={post.tag}
+        setTagList={setTagList}
+        tagList={tagList}
       >
         <React.Fragment>
           <div className={classes.buttons}>

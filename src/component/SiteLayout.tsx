@@ -10,12 +10,14 @@ import { useContextDispatch, useContextState } from "../context";
 import Switch from "@material-ui/core/Switch";
 import Link from "next/link";
 import { Box, Container, Avatar, Fab, Menu, MenuItem } from "@material-ui/core";
-
+import Head from "next/head";
 import theme from "./Theme/lightTheme";
 import { StyledLink } from "./StyledLink";
 import { useParentStyles } from "../style";
 import Cookies from "universal-cookie";
 import { getS3Image } from "../helper";
+import LoginDialog from "./LoginDialog";
+import Logo from "./svg/logo";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,9 +48,27 @@ const MenuBar = ({ children }) => {
     setAnchorEl(event.currentTarget);
   };
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value: string) => {
+    setOpen(false);
+  };
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <Head>
+        <title>JobInsider</title>
+        <meta
+          property="og:description"
+          content="JobInsider is a community where people can share their working experience in the industry/company. It tells the stories you want to know."
+          key="description"
+        />
+        <link rel="icon" href="/j.ico" />
+      </Head>
+      <AppBar position="static" elevation={1}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -60,13 +80,18 @@ const MenuBar = ({ children }) => {
           </IconButton>
           <Box flexGrow={1}>
             <Link href="/">
-              <Button disableElevation>VoteApp</Button>
+              <a>
+                <Logo></Logo>
+              </a>
             </Link>
           </Box>
           {!loggedIn ? (
-            <Link href="/login" passHref>
-              <Button color="inherit">Login</Button>
-            </Link>
+            <React.Fragment>
+              <Button variant="outlined" onClick={handleClickOpen}>
+                Login
+              </Button>
+              <LoginDialog open={open} onClose={handleClose} />
+            </React.Fragment>
           ) : (
             <div>
               <Box display="flex" alignItems="center">
@@ -99,7 +124,7 @@ const MenuBar = ({ children }) => {
           />
         </Toolbar>
       </AppBar>
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <div className={classes.content}>{children}</div>
       </Container>
     </div>

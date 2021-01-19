@@ -2,10 +2,8 @@ import { gql, useMutation } from "@apollo/client";
 import {
   Typography,
   Grid,
-  TextField,
   Paper,
   makeStyles,
-  Button,
   Avatar,
   Box,
 } from "@material-ui/core";
@@ -14,15 +12,16 @@ import React, { useEffect } from "react";
 import { initializeApollo } from "../src/component/config/apollo";
 import { useParentStyles } from "../src/style";
 import Error from "next/error";
-import axios from "axios";
+
 import { getS3Image, uploadImage } from "../src/helper";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
+import { SingleEditInput } from "../src/component/SingleEditInput";
+
 const ME = gql`
   query {
     me {
@@ -87,18 +86,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function useInput({ type /*...*/ }) {
-  const [value, setValue] = useState("");
-  const input = (
-    <input
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      type={type}
-    />
-  );
-  return [value, input];
-}
-
 function useEditableInput({ defaultValue, name }) {
   const [value, setValue] = useState(defaultValue || "");
   const [valueEdit, setValueEdit] = useState(false);
@@ -130,31 +117,52 @@ function useEditableInput({ defaultValue, name }) {
 function Me({ me, statusCode }) {
   const parent_classes = useParentStyles();
 
+  const [basicProfile, setBasicProfile] = useState([
+    {
+      name: "email",
+      label: "Email",
+      value: me?.profile?.email,
+      type: "email",
+    },
+    {
+      name: "name",
+      label: "Name",
+      value: me?.profile?.name,
+    },
+    {
+      name: "biodata",
+      label: "Biodata",
+      value: me?.profile?.biodata,
+
+      // multiline: true,
+      // rowsMax: 4,
+    },
+  ]);
+
+  const [linkProfile, setLinkProfile] = useState([
+    {
+      name: "linkedIn",
+      label: "LinkedIn",
+      value: me?.profile?.link?.linkedIn,
+    },
+    {
+      name: "github",
+      label: "Github",
+      value: me?.profile?.link?.github,
+    },
+  ]);
+
   const classes = useStyles();
-  const [email, setEmail, EditEmailButton, emailEdit] = useEditableInput({
-    defaultValue: me.profile.email,
-    name: "email",
-  });
-  const [name, setName, EditNameButton, nameEdit] = useEditableInput({
-    defaultValue: me.profile.name,
-    name: "name",
-  });
-  const [
-    biodata,
-    setBiodata,
-    EditBiodataButton,
-    biodataEdit,
-  ] = useEditableInput({
-    defaultValue: me.profile.biodata,
-    name: "biodata",
-  });
+
+  const [updateAPI, { data }] = useMutation(UPDATE_PROFILE);
+
   const [
     profileImage,
     setProfileImage,
     EditProfileImageButton,
     profileImageEdit,
   ] = useEditableInput({
-    defaultValue: me.profile.profileImage,
+    defaultValue: me?.profile?.profileImage,
     name: "profileImage",
   });
 
@@ -171,51 +179,16 @@ function Me({ me, statusCode }) {
         </Box>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <TextField
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              label="Email"
-              type="email"
-              fullWidth
-              disabled={!emailEdit}
-              autoComplete="email"
-              InputProps={{
-                endAdornment: EditEmailButton,
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              name="Name"
-              label="name"
-              fullWidth
-              disabled={!nameEdit}
-              InputProps={{
-                endAdornment: EditNameButton,
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <TextField
-              required
-              value={biodata}
-              name="Biodata"
-              label="biodata"
-              onChange={(e) => setBiodata(e.target.value)}
-              fullWidth
-              multiline
-              rowsMax={4}
-              disabled={!biodataEdit}
-              InputProps={{
-                endAdornment: EditBiodataButton,
-              }}
-            />
-          </Grid>
+          {basicProfile.map((el, i) => (
+            <Grid item xs={12} md={12}>
+              <SingleEditInput
+                attr={el}
+                setDataField={setBasicProfile}
+                dataField={basicProfile}
+                updateAPI={updateAPI}
+              ></SingleEditInput>
+            </Grid>
+          ))}
 
           <Grid item xs={12} md={12}>
             <Box
@@ -247,6 +220,21 @@ function Me({ me, statusCode }) {
               </Box>
             </Box>
           </Grid>
+          <Box display="flex">
+            <Box flexGrow={1} fontWeight={700}>
+              <Typography variant="h2">Link</Typography>
+            </Box>
+          </Box>
+          {linkProfile.map((el, i) => (
+            <Grid item xs={12} md={12}>
+              <SingleEditInput
+                attr={el}
+                setDataField={setLinkProfile}
+                dataField={linkProfile}
+                updateAPI={updateAPI}
+              ></SingleEditInput>
+            </Grid>
+          ))}
         </Grid>
       </Paper>
     </React.Fragment>
@@ -281,8 +269,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .query({
       query: ME,
     })
-    .then((data) => {
-      me = data?.data?.me;
+    .then((data: { data: { me: any } }) => {
+      if (data?.data?.me) me = data?.data?.me;
+      else statusCode = 404;
     })
     .catch(() => {
       statusCode = 404;
