@@ -77,9 +77,7 @@ function Index() {
       <Editor
         content={content}
         setContent={setContent}
-        onSubmit={onSubmit}
         register={register}
-        errors={errors}
         tagList={tagList}
         setTagList={setTagList}
       >
