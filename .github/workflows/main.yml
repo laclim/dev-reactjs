@@ -15,9 +15,9 @@ jobs:
       - name: push to server
         uses: easingthemes/ssh-deploy@v2.1.5
         with:        
-          SSH_PRIVATE_KEY: ${{ PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           # Remote host
-          REMOTE_HOST: ${{ REMOTE_HOST }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           # Remote user
           REMOTE_USER: ubuntu
           # Remote port
