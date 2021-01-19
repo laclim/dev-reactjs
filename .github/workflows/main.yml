@@ -1,0 +1,25 @@
+name: ssh deploy
+  # You may pin to the exact commit or the version.
+  # uses: easingthemes/ssh-deploy@191986574c0735ffad7ae1a297a414d6e6f95375
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - with:
+         uses: easingthemes/ssh-deploy@v2.1.5
+         SSH_PRIVATE_KEY: ${{ PRIVATE_KEY }}
+         # Remote host
+         REMOTE_HOST: ${{ REMOTE_HOST }}
+         # Remote user
+         REMOTE_USER: ubuntu
+         # Remote port
+         # Arguments to pass to rsync
+         ARGS: |
+           cd abc
