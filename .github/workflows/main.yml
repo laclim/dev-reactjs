@@ -12,6 +12,15 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+         node-version: '10.x'
+      - name: Install npm dependencies
+        run: npm install
+      - name: Run build task
+        run: npm run build --if-present
       - name: PUSH TO SERVER
         uses: easingthemes/ssh-deploy@v2.1.5
         with:        
