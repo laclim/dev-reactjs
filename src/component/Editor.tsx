@@ -21,19 +21,16 @@ function Editor({
   children,
   content,
   setContent,
-  onSubmit,
+
   register,
   title,
   tagList,
   setTagList,
-  errors,
 }: {
   children: any;
   content: Array<Object>;
   setContent: any;
-  onSubmit: any;
   register: any;
-  errors: any;
   title?: string;
   setTagList: any;
   tagList?: Array<string>;
@@ -80,8 +77,8 @@ function Editor({
                 value={title}
                 fullWidth
                 onChange={(e) => setCurrentLength(e.target.value.length)}
-                helperText={errors?.title && "This field is required"}
-                error={Boolean(errors?.title)}
+                helperText={!title && "This field is required"}
+                error={Boolean(!title)}
                 inputProps={{ maxLength: 50 }}
               />
               <Typography variant="caption" style={{ float: "right" }}>

@@ -87,7 +87,6 @@ function EditPost({ post, isEditPost }) {
       <Editor
         content={content}
         setContent={setContent}
-        onSubmit={onSubmit}
         register={register}
         title={post.title}
         setTagList={setTagList}
