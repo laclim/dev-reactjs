@@ -21,7 +21,7 @@ jobs:
           # Remote user
           REMOTE_USER: ubuntu
           # Remote port
-          SOURCE: "/"
+          SOURCE: "../"
           # Arguments to pass to rsync
           ARGS: |
             cd dev-reactjs
