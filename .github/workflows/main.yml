@@ -23,5 +23,6 @@ jobs:
           # Remote port
           SOURCE: ""
           # Arguments to pass to rsync
+          TARGET: "dev-reactjs"
           # ARGS: |
 
