@@ -23,4 +23,4 @@ jobs:
           # Remote port
           # Arguments to pass to rsync
           ARGS: |
-            cd abc
+            cd dev-reactjs
