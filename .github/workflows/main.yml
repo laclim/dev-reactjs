@@ -43,5 +43,6 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
            cd dev-reactjs
+           echo "$ENV_FILE" >.env
            pm2 restart all
 
