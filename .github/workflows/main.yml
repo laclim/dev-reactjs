@@ -33,8 +33,7 @@ jobs:
           SOURCE: ""
           # Arguments to pass to rsync
           TARGET: "dev-reactjs"
-          # ARGS: |       
-          #  echo '$ENV_FILE' >.env  
+          ARGS: "-rltgoDzvO --exclude .env"  
       - name: restart pm2
         uses: appleboy/ssh-action@master
         with:
@@ -43,6 +42,5 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
            cd dev-reactjs
-           echo "$ENV_FILE" >.env
            pm2 restart all
 
