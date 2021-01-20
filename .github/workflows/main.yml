@@ -21,6 +21,9 @@ jobs:
         run: npm install
       - name: Run build task
         run: npm run build --if-present
+      - name: Create env
+        run: |
+         echo "${{ secrets.ENV_FILE }}" >.env
       - name: build and rsync
         uses: easingthemes/ssh-deploy@v2.1.5
         with:        
@@ -33,7 +36,7 @@ jobs:
           SOURCE: ""
           # Arguments to pass to rsync
           TARGET: "dev-reactjs"
-          ARGS: echo "${{ secrets.ENV_FILE }}" >.env
+          # ARGS: ""
       - name: restart pm2
         uses: appleboy/ssh-action@master
         with:
