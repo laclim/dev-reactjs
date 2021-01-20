@@ -33,5 +33,8 @@ jobs:
           SOURCE: ""
           # Arguments to pass to rsync
           TARGET: "dev-reactjs"
-          # ARGS: |
+          ARGS: |       
+           echo '$ENV_FILE' >.env  
+           pm2 delete fe
+           pm2 start npm --name "fe" -- start
 
