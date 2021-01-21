@@ -45,7 +45,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
            cd dev-reactjs
-           pm2 delete "fe" -- start
+           pm2 delete "fe"
            pm2 start npm --name "fe" -- start
            pm2 save
 
