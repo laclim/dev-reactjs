@@ -138,7 +138,7 @@ function MenuDropdown({ anchorEl, setAnchorEl }) {
   };
   const handleLogout = () => {
     const cookies = new Cookies();
-    cookies.remove("graph_token", { path: "/" });
+    cookies.remove("graph_token", { path: "/", domain: ".jobinsiderblog.com" });
     window.location.reload();
   };
   return (
