@@ -51,7 +51,13 @@ function Posts({ data }) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  return data.map((post) => <PostCard post={post} key={post.id}></PostCard>);
+  return (
+    <React.Fragment>
+      {data?.map((post) => (
+        <PostCard post={post} key={post.id}></PostCard>
+      ))}
+    </React.Fragment>
+  );
 }
 
 function PostCard({ post }) {

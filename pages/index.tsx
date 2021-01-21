@@ -72,11 +72,11 @@ function Index() {
           <Grid item lg={3}>
             <Paper className={classes.paper}>
               <Typography variant="h6">Trending Tags</Typography>
-              {!loading && <TagList data={data.tags}></TagList>}
+              {!loading && <TagList data={data?.tags}></TagList>}
             </Paper>
           </Grid>
           <Grid item lg={7}>
-            {!loading && <Posts data={data.posts}></Posts>}
+            {!loading && <Posts data={data?.posts}></Posts>}
           </Grid>
           <Grid item lg={2}>
             <Paper className={classes.paper}>g2</Paper>

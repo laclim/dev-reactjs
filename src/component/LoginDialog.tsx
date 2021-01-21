@@ -16,7 +16,7 @@ import { useContextState } from "../context";
 import { Box } from "@material-ui/core";
 import Logo from "./svg/logo";
 import { getS3Image } from "../helper";
-
+import getConfig from "next/config";
 const useStyles = makeStyles({
   avatar: {
     width: 32,
@@ -31,13 +31,16 @@ export interface LoginDialogProps {
 }
 
 export default function LoginDialog(props: LoginDialogProps) {
+  const { publicRuntimeConfig } = getConfig();
   const classes = useStyles();
   const { onClose, open } = props;
 
   const handleListItemClick = (value: string) => {
     onClose(value);
   };
-
+  const redirect_uri = encodeURIComponent(
+    publicRuntimeConfig.BASE_URL + "/linkedin"
+  );
   const { loggedIn } = useContextState();
   const githubLogin = () => {
     location.replace(
@@ -46,7 +49,7 @@ export default function LoginDialog(props: LoginDialogProps) {
   };
   const connectLinkedIn = () => {
     location.replace(
-      "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86fsfm3ho95j0p&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Flinkedin&scope=r_liteprofile%20r_emailaddress"
+      `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86fsfm3ho95j0p&redirect_uri=${redirect_uri}&scope=r_liteprofile%20r_emailaddress`
     );
   };
 
