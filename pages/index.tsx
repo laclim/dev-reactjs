@@ -10,7 +10,7 @@ import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import Posts from "../src/component/Posts";
 import TagList from "../src/component/TagList";
-
+import { GetServerSideProps } from "next";
 const GET_POSTS = gql`
   query {
     posts {
@@ -87,10 +87,12 @@ function Index() {
   );
 }
 
-Home.getInitialProps = async (appContext) => {
-  // const appProps = await App.getInitialProps(appContext);
-
-  return { asd: "sadas" };
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // Fetch data from external API
+  console.log(context.req);
+  return {
+    props: { asdas: "asda" },
+  };
 };
 
 export default Home;

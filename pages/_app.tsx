@@ -26,7 +26,7 @@ const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 export default function MyApp(props) {
   const { Component, pageProps, serverProps } = props;
   const GRAPH_URL = publicRuntimeConfig.GRAPH_URL;
-  const { displayName, profileImage } = pageProps;
+  const { displayName, profileImage, firstTimeLogin } = pageProps;
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
@@ -65,7 +65,7 @@ export default function MyApp(props) {
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 
       <ApolloProvider client={client}>
-        <Context defaultProps={{ displayName, profileImage }}>
+        <Context defaultProps={{ displayName, profileImage, firstTimeLogin }}>
           <MyTheme>
             <SiteLayout>
               <Component {...pageProps} />
@@ -81,7 +81,9 @@ export default function MyApp(props) {
 MyApp.getInitialProps = async ({ ctx }) => {
   let displayName,
     profileImage = "";
-  let loggedIn = false;
+  let loggedIn,
+    firstTimeLogin = false;
+
   if (ctx.req) {
     const cookies = new Cookies(ctx.req.headers.cookie);
     const token = cookies.get("graph_token");
@@ -108,6 +110,7 @@ MyApp.getInitialProps = async ({ ctx }) => {
             query getMe {
               me {
                 id
+                email
                 profile {
                   name
                   profileImage
@@ -117,18 +120,22 @@ MyApp.getInitialProps = async ({ ctx }) => {
           `,
         })
         .then((result) => {
+          const data = result.data.me;
           loggedIn = true;
-
-          displayName = result.data.me.profile.name;
-          profileImage = result.data.me.profile.profileImage;
+          displayName = data.profile.name;
+          profileImage = data.profile.profileImage;
+          if (!data.email) {
+            firstTimeLogin = true;
+          }
         })
         .catch((err) => {
+          firstTimeLogin = true;
           console.log(err);
         });
     }
   }
 
-  return { pageProps: { displayName, profileImage } };
+  return { pageProps: { displayName, profileImage, firstTimeLogin } };
 };
 
 MyApp.propTypes = {

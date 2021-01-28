@@ -12,10 +12,10 @@ import PersonIcon from "@material-ui/icons/Person";
 import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
 import { blue } from "@material-ui/core/colors";
-import { useContextState } from "../context";
+import { useContextState } from "../../context";
 import { Box } from "@material-ui/core";
-import Logo from "./svg/logo";
-import { getS3Image } from "../helper";
+import Logo from "../svg/logo";
+import { getS3Image } from "../../helper";
 import getConfig from "next/config";
 const useStyles = makeStyles({
   avatar: {
@@ -60,6 +60,7 @@ export default function LoginDialog(props: LoginDialogProps) {
       onClose={onClose}
       aria-labelledby="simple-dialog-title"
       open={open}
+      disableBackdropClick
     >
       <DialogTitle id="simple-dialog-title">
         <Box textAlign="center">

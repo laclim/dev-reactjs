@@ -5,7 +5,7 @@ type Action =
   | { type: "decrement" }
   | { type: "login"; displayName?: string; profileImage?: string }
   | { type: "logout" }
-  | { type: "switchTheme"; isDarkTheme: boolean }
+  | { type: "switchTheme"; themeColor: string }
   | { type: "showSnackbar"; successMessage?: string }
   | { type: "hideSnackbar" }
   | { type: "updateProfile"; displayName?: string; phoneNumber?: string };
@@ -13,11 +13,12 @@ type Dispatch = (action: Action) => void;
 type State = {
   count: number;
   loggedIn: boolean;
-  isDarkTheme: boolean;
+  themeColor: string;
   showSnackbar: boolean;
   successMessage: string;
   displayName: string;
   profileImage: string;
+  firstTimeLogin: boolean;
 };
 type CountProviderProps = { children: React.ReactNode };
 
@@ -44,7 +45,7 @@ function contextReducer(state, action) {
       return { ...state, loggedIn: false, displayName: "" };
     }
     case "switchTheme": {
-      return { ...state, isDarkTheme: action.isDarkTheme };
+      return { ...state, themeColor: action.themeColor };
     }
     case "showSnackbar": {
       return {
@@ -82,16 +83,17 @@ function useContextDispatch() {
 }
 
 export default function Context({ children, defaultProps }) {
-  const { displayName, profileImage } = defaultProps;
+  const { displayName, profileImage, firstTimeLogin } = defaultProps;
 
   const [state, dispatch] = useReducer(contextReducer, {
     count: 0,
     loggedIn: Boolean(displayName),
-    isDarkTheme: false,
+    themeColor: "light",
     showSnackbar: false,
     successMessage: "",
     displayName,
     profileImage,
+    firstTimeLogin,
   });
   return (
     <StateContext.Provider value={state}>

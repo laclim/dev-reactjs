@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import React, { JSXElementConstructor } from "react";
 import LazyLoad from "react-lazyload";
+import psl from "psl";
 const useStyles = (props) => {
   return makeStyles((theme) => ({
     image_tool__imagepicture: {
@@ -138,6 +139,7 @@ function parseBlock(block: any, index: number) {
       );
       break;
     case "linkTool":
+      const domain = new URL(block.data.meta.url);
       el = (
         <React.Fragment>
           <a
@@ -158,9 +160,7 @@ function parseBlock(block: any, index: number) {
             <p className={classes.link_tool__description}>
               {block.data.meta.description}
             </p>
-            <span className={classes.link_tool__anchor}>
-              {block.data.meta.url}
-            </span>
+            <span className={classes.link_tool__anchor}>{domain.hostname}</span>
           </a>
         </React.Fragment>
       );

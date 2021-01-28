@@ -4,9 +4,9 @@ import lightTheme from "./lightTheme";
 import darkTheme from "./darkTheme";
 import { ThemeProvider, CssBaseline } from "@material-ui/core";
 const MyTheme = ({ children }) => {
-  const { isDarkTheme } = useContextState();
+  const { themeColor } = useContextState();
   let theme;
-  if (isDarkTheme) {
+  if (themeColor == "dark") {
     theme = darkTheme;
   } else {
     theme = lightTheme;

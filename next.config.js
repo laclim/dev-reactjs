@@ -16,7 +16,6 @@ module.exports = withImages({
   exclude: path.resolve(__dirname, 'src/images/svg'),
   webpack(config, options) {
     return config
-  }
-
+  }  
 });
 
