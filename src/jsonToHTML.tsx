@@ -1,7 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 import React, { JSXElementConstructor } from "react";
 import LazyLoad from "react-lazyload";
-import psl from "psl";
 const useStyles = (props) => {
   return makeStyles((theme) => ({
     image_tool__imagepicture: {
