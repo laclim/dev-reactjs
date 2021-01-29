@@ -166,7 +166,7 @@ function MenuDropdown({ anchorEl, setAnchorEl, displayName }) {
     const cookies = new Cookies();
     cookies.remove("graph_token", {
       path: "/",
-      domain: publicRuntimeConfig.DOMAIN,
+      domain: publicRuntimeConfig.COOKIES_DOMAIN,
     });
     window.location.reload();
   };
