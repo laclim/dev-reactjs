@@ -11,7 +11,7 @@ module.exports = withImages({
     GRAPH_URL: process.env.GRAPH_URL,
     NODE_ENV: process.env.NODE_ENV,
     CLOUDFRONT_URL: process.env.CLOUDFRONT_URL,
-    RESIZE_CLOUDFRONT_URL: process.env.RESIZE_CLOUDFRONT_URL
+    COOKIES_DOMAIN: process.env.COOKIES_DOMAIN
   },
   exclude: path.resolve(__dirname, 'src/images/svg'),
   webpack(config, options) {
