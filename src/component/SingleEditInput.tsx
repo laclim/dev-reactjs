@@ -15,7 +15,6 @@ function useDataField(dataField, setDataField) {
   }, []);
   function fields(state: any, action: any) {
     let newArr = dataField.map((item) => {
-      console.log(dataField);
       if (action.name == item.name) {
         switch (action.type) {
           case "setValue":

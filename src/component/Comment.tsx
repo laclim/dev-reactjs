@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
-import MLink from "@material-ui/core/Link";
+
 dayjs.extend(relativeTime);
 
 const GET_COMMENT = gql`
@@ -198,7 +198,6 @@ function Comment({ postID }) {
             ...el,
           };
       });
-      console.log(d);
       setCommentList(d);
     });
   };

@@ -89,7 +89,6 @@ function Index() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // Fetch data from external API
-  console.log(context.req);
   return {
     props: { asdas: "asda" },
   };
