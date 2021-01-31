@@ -17,17 +17,26 @@ import { Box } from "@material-ui/core";
 import Logo from "../svg/logo";
 import { getS3Image } from "../../helper";
 import getConfig from "next/config";
+import CloseIcon from "@material-ui/icons/Close";
+import theme from "../Theme/lightTheme";
 const useStyles = makeStyles({
   avatar: {
     width: 32,
     margin: 4,
   },
+  closeButton: {
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+    position: "absolute",
+    marginRight: theme.spacing(1),
+    right: 0,
+  },
 });
 
 export interface LoginDialogProps {
   open: boolean;
-
-  onClose: (value: string) => void;
+  onClose: () => void;
 }
 
 export default function LoginDialog(props: LoginDialogProps) {
@@ -35,9 +44,6 @@ export default function LoginDialog(props: LoginDialogProps) {
   const classes = useStyles();
   const { onClose, open } = props;
 
-  const handleListItemClick = (value: string) => {
-    onClose(value);
-  };
   const redirect_uri = encodeURIComponent(
     publicRuntimeConfig.BASE_URL + "/linkedin"
   );
@@ -54,15 +60,11 @@ export default function LoginDialog(props: LoginDialogProps) {
   };
 
   return (
-    <Dialog
-      maxWidth="xs"
-      fullWidth
-      onClose={onClose}
-      aria-labelledby="simple-dialog-title"
-      open={open}
-      disableBackdropClick
-    >
-      <DialogTitle id="simple-dialog-title">
+    <Dialog maxWidth="xs" fullWidth onClose={onClose} open={open}>
+      <DialogTitle>
+        <Button className={classes.closeButton} onClick={() => onClose()}>
+          <CloseIcon></CloseIcon>
+        </Button>
         <Box textAlign="center">
           <Logo stopColor="#ffffff" height="64"></Logo>
         </Box>
@@ -77,7 +79,6 @@ export default function LoginDialog(props: LoginDialogProps) {
               className={classes.avatar}
               src="/static/images/GitHub-Mark-64px.png"
             />
-
             <ListItemText primary="Github Login" />
           </ListItem>
 

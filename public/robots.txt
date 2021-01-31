@@ -1,0 +1,6 @@
+Sitemap: https://jobinsiderblog.com/static/sitemap.xml
+
+User-agent: *
+Allow: /*
+
+Disallow: /api/*

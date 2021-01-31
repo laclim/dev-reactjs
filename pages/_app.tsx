@@ -124,12 +124,12 @@ MyApp.getInitialProps = async ({ ctx }) => {
           loggedIn = true;
           displayName = data.profile.name;
           profileImage = data.profile.profileImage;
+
           if (!data.email) {
             firstTimeLogin = true;
           }
         })
         .catch((err) => {
-          firstTimeLogin = true;
           console.log(err);
         });
     }

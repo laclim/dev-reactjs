@@ -17,7 +17,10 @@ module.exports = withImages({
   exclude: path.resolve(__dirname, 'src/images/svg'),
   webpack(config, options) {
     return config
+  },
+  generateBuildId: async () => {
+    // You can, for example, get the latest git commit hash here
+    return 'BUILD_ID'
   }
-
 });
 

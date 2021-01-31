@@ -65,7 +65,7 @@ const MenuBar = ({ children }) => {
     setOpen(true);
   };
 
-  const handleClose = (value: string) => {
+  const handleClose = () => {
     setOpen(false);
   };
   const matches = useMediaQuery("(max-width:600px)");
@@ -75,9 +75,13 @@ const MenuBar = ({ children }) => {
         <title>JobInsider: Log In or Sign Up</title>
         <meta
           property="og:description"
-          content="JobInsider is a community where people can share their working experience in the industry/company. It tells the stories you want to know."
+          content="JobInsider is a community where people can share their working experience in the industry/company. It tells the stories you want to know. Free speech for everyone"
           key="description"
         />
+        <meta
+          name="Description"
+          content="JobInsider is a community where people can share their working experience in the industry/company. It tells the stories you want to know. Free speech for everyone"
+        ></meta>
         <link rel="icon" href="/j.ico" />
       </Head>
       <AppBar position="static" elevation={1}>
