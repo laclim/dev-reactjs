@@ -17,6 +17,7 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "axios": "^0.21.1",
     "cross-env": "^7.0.3",
+    "cross-fetch": "^3.0.6",
     "dayjs": "^1.9.4",
     "domino": "^2.1.6",
     "editorjs-html": "^3.0.3",
