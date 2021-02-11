@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import LoginDialog from "./component/Dialog/LoginDialog";
 
 type Action =
   | { type: "increment" }
@@ -8,7 +9,8 @@ type Action =
   | { type: "switchTheme"; themeColor: string }
   | { type: "showSnackbar"; successMessage?: string }
   | { type: "hideSnackbar" }
-  | { type: "updateProfile"; displayName?: string; phoneNumber?: string };
+  | { type: "updateProfile"; displayName?: string; phoneNumber?: string }
+  | { type: "toggleLoginDialog"; force?: boolean };
 type Dispatch = (action: Action) => void;
 type State = {
   count: number;
@@ -18,9 +20,10 @@ type State = {
   successMessage: string;
   displayName: string;
   profileImage: string;
+  profileSlug: string;
   firstTimeLogin: boolean;
+  loginDialog: { isOpen: boolean; force: boolean };
 };
-type CountProviderProps = { children: React.ReactNode };
 
 const StateContext = React.createContext<State | undefined>(undefined);
 const DispatchContext = React.createContext<Dispatch | undefined>(undefined);
@@ -60,6 +63,15 @@ function contextReducer(state, action) {
     case "updateProfile": {
       return { ...state, displayName: action.displayName || state.displayName };
     }
+    case "toggleLoginDialog": {
+      return {
+        ...state,
+        loginDialog: {
+          isOpen: !state.loginDialog.isOpen,
+          force: action.force,
+        },
+      };
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -83,7 +95,12 @@ function useContextDispatch() {
 }
 
 export default function Context({ children, defaultProps }) {
-  const { displayName, profileImage, firstTimeLogin } = defaultProps;
+  const {
+    displayName,
+    profileImage,
+    firstTimeLogin,
+    profileSlug,
+  } = defaultProps;
 
   const [state, dispatch] = useReducer(contextReducer, {
     count: 0,
@@ -92,8 +109,10 @@ export default function Context({ children, defaultProps }) {
     showSnackbar: false,
     successMessage: "",
     displayName,
+    profileSlug,
     profileImage,
     firstTimeLogin,
+    loginDialog: { isOpen: false, force: false },
   });
   return (
     <StateContext.Provider value={state}>

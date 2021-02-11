@@ -14,11 +14,14 @@ import {
   makeStyles,
   Paper,
 } from "@material-ui/core";
+import { useContextDispatch, useContextState } from "../src/context";
+import LoginDialog from "../src/component/Dialog/LoginDialog";
+import { ifNoLoginShowDialog } from "../src/helper";
 function Post() {
   return (
     <div className="container">
       <Head>
-        <title>Create Next App</title>
+        <title>New story</title>
       </Head>
       <Index />
     </div>
@@ -50,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function Index() {
+  ifNoLoginShowDialog();
   const [content, setContent] = useState([]);
   const [tagList, setTagList] = useState([]);
   const classes = useStyles();
@@ -70,7 +74,10 @@ function Index() {
   const [addPost, { data }] = useMutation(ADD_POST);
   const onDraft = (data) => {
     data = { ...data, content, tag: tagList, status: false };
-    addPost({ variables: { input: data } });
+    addPost({ variables: { input: data } }).then((res) => {
+      const { slug } = res.data.createPost;
+      router.push("/" + slug);
+    });
   };
   return (
     <React.Fragment>
@@ -80,6 +87,7 @@ function Index() {
         register={register}
         tagList={tagList}
         setTagList={setTagList}
+        errors={errors}
       >
         <React.Fragment>
           <div className={classes.buttons}>

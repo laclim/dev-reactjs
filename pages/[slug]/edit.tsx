@@ -75,7 +75,9 @@ function EditPost({ post, isEditPost }) {
   const [updatePost, { data }] = useMutation(UPDATE_POST);
   const onDraft = (data) => {
     data = { ...data, content, tag: tagList, status: false };
-    updatePost({ variables: { id: post.id, input: data } });
+    updatePost({ variables: { id: post.id, input: data } }).then(() => {
+      router.push("/" + post.slug);
+    });
   };
 
   return (

@@ -26,7 +26,7 @@ const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 export default function MyApp(props) {
   const { Component, pageProps, serverProps } = props;
   const GRAPH_URL = publicRuntimeConfig.GRAPH_URL;
-  const { displayName, profileImage, firstTimeLogin } = pageProps;
+  const { displayName, profileImage, firstTimeLogin, profileSlug } = pageProps;
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
@@ -65,7 +65,14 @@ export default function MyApp(props) {
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 
       <ApolloProvider client={client}>
-        <Context defaultProps={{ displayName, profileImage, firstTimeLogin }}>
+        <Context
+          defaultProps={{
+            displayName,
+            profileImage,
+            firstTimeLogin,
+            profileSlug,
+          }}
+        >
           <MyTheme>
             <SiteLayout>
               <Component {...pageProps} />
@@ -80,7 +87,8 @@ export default function MyApp(props) {
 
 MyApp.getInitialProps = async ({ ctx }) => {
   let displayName,
-    profileImage = "";
+    profileImage,
+    profileSlug = "";
   let loggedIn,
     firstTimeLogin = false;
 
@@ -114,6 +122,7 @@ MyApp.getInitialProps = async ({ ctx }) => {
                 profile {
                   name
                   profileImage
+                  slug
                 }
               }
             }
@@ -124,7 +133,7 @@ MyApp.getInitialProps = async ({ ctx }) => {
           loggedIn = true;
           displayName = data.profile.name;
           profileImage = data.profile.profileImage;
-
+          profileSlug = data.profile.slug;
           if (!data.email) {
             firstTimeLogin = true;
           }
@@ -135,7 +144,9 @@ MyApp.getInitialProps = async ({ ctx }) => {
     }
   }
 
-  return { pageProps: { displayName, profileImage, firstTimeLogin } };
+  return {
+    pageProps: { displayName, profileImage, firstTimeLogin, profileSlug },
+  };
 };
 
 MyApp.propTypes = {

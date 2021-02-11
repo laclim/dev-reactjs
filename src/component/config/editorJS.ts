@@ -2,6 +2,7 @@ import axios from "axios";
 import getConfig from "next/config";
 const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 function editorJSConfig(content, setContent, setLoadEditor) {
+  setLoadEditor(true);
   import("@editorjs/editorjs").then(async (EditorJS) => {
     import("@editorjs/header").then(async (Header) => {
       import("@editorjs/list").then(async (List) => {
@@ -124,7 +125,6 @@ function editorJSConfig(content, setContent, setLoadEditor) {
                     autofocus: true,
                     placeholder: "Let`s write an awesome story!",
                   });
-                  setLoadEditor(true);
                 });
               });
             });

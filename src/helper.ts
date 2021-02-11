@@ -1,6 +1,7 @@
 import axios from "axios";
 import getConfig from "next/config";
 import { useEffect, useReducer } from "react";
+import { useContextState, useContextDispatch } from "./context";
 const { publicRuntimeConfig } = getConfig();
 export const uploadImage = async (file) => {
   let formData = new FormData();
@@ -36,7 +37,17 @@ export const getS3Image = (key, width?, height?) => {
     } else {
       return `${publicRuntimeConfig.CLOUDFRONT_URL}/${key}`;
     }
+  } else {
+    return "";
   }
+};
 
-  return publicRuntimeConfig.CLOUDFRONT_URL + "/" + key;
+export const ifNoLoginShowDialog = () => {
+  const { loggedIn } = useContextState();
+  const dispatch = useContextDispatch();
+  useEffect(() => {
+    if (!loggedIn) {
+      dispatch({ type: "toggleLoginDialog", force: true });
+    }
+  }, []);
 };

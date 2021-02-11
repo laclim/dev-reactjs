@@ -31,6 +31,7 @@ const ME = gql`
         profileImage
         biodata
         createdAt
+        slug
         link {
           github
           linkedIn
@@ -130,6 +131,11 @@ function Me({ me, statusCode }) {
       value: me?.profile?.name,
     },
     {
+      name: "slug",
+      label: "Slug",
+      value: me?.profile?.slug,
+    },
+    {
       name: "biodata",
       label: "Biodata",
       value: me?.profile?.biodata,
@@ -200,7 +206,6 @@ function Me({ me, statusCode }) {
               <Box>
                 <div style={{ position: "relative" }}>
                   <Avatar
-                    alt="Remy Sharp"
                     src={getS3Image(profileImage, 150, 150)}
                     className={classes.large}
                   />

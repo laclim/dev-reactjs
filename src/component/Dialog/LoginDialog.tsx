@@ -12,7 +12,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
 import { blue } from "@material-ui/core/colors";
-import { useContextState } from "../../context";
+import { useContextDispatch, useContextState } from "../../context";
 import { Box } from "@material-ui/core";
 import Logo from "../svg/logo";
 import { getS3Image } from "../../helper";
@@ -39,11 +39,11 @@ export interface LoginDialogProps {
   onClose: () => void;
 }
 
-export default function LoginDialog(props: LoginDialogProps) {
+export default function LoginDialog() {
   const { publicRuntimeConfig } = getConfig();
   const classes = useStyles();
-  const { onClose, open } = props;
-
+  const { loginDialog } = useContextState();
+  const dispatch = useContextDispatch();
   const redirect_uri = encodeURIComponent(
     publicRuntimeConfig.BASE_URL + "/linkedin"
   );
@@ -58,13 +58,23 @@ export default function LoginDialog(props: LoginDialogProps) {
       `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86fsfm3ho95j0p&redirect_uri=${redirect_uri}&scope=r_liteprofile%20r_emailaddress`
     );
   };
-
+  const onClose = () => {
+    dispatch({ type: "toggleLoginDialog" });
+  };
   return (
-    <Dialog maxWidth="xs" fullWidth onClose={onClose} open={open}>
+    <Dialog
+      maxWidth="xs"
+      fullWidth
+      onClose={onClose}
+      open={loginDialog.isOpen}
+      disableBackdropClick={loginDialog.force}
+    >
       <DialogTitle>
-        <Button className={classes.closeButton} onClick={() => onClose()}>
-          <CloseIcon></CloseIcon>
-        </Button>
+        {!loginDialog.force && (
+          <Button className={classes.closeButton} onClick={() => onClose()}>
+            <CloseIcon></CloseIcon>
+          </Button>
+        )}
         <Box textAlign="center">
           <Logo stopColor="#ffffff" height="64"></Logo>
         </Box>

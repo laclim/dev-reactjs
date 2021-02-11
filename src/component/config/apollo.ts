@@ -7,7 +7,7 @@ let apolloClient;
 
 function createIsomorphLink(ctx) {
   let authLink = null;
-  if (ctx.req) {
+  if (ctx && ctx.req) {
     const cookies = new Cookies(ctx.req.headers.cookie);
     const token = cookies.get("graph_token");
     authLink = setContext((_, { headers }) => {

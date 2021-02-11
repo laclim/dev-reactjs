@@ -21,6 +21,7 @@ import FirstTImeLoginDialog from "./Dialog/FirstTImeLoginDialog";
 import Logo from "./svg/logo";
 import getConfig from "next/config";
 import useMediaQuery from "@material-ui/core/useMediaQuery/useMediaQuery";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -53,7 +54,12 @@ const MenuBar = ({ children }) => {
     }
     dispatch({ type: "switchTheme", themeColor: themeColorLS });
   }, []);
-  const { loggedIn, displayName, profileImage } = useContextState();
+  const {
+    loggedIn,
+    displayName,
+    profileImage,
+    profileSlug,
+  } = useContextState();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -105,10 +111,13 @@ const MenuBar = ({ children }) => {
           </Box>
           {!loggedIn ? (
             <React.Fragment>
-              <Button variant="outlined" onClick={handleClickOpen}>
+              <Button
+                variant="outlined"
+                onClick={() => dispatch({ type: "toggleLoginDialog" })}
+              >
                 Login
               </Button>
-              <LoginDialog open={open} onClose={handleClose} />
+              <LoginDialog />
             </React.Fragment>
           ) : (
             <div>
@@ -129,6 +138,7 @@ const MenuBar = ({ children }) => {
                   displayName={displayName}
                   anchorEl={anchorEl}
                   setAnchorEl={setAnchorEl}
+                  profileSlug={profileSlug}
                 />
               </Box>
             </div>
@@ -160,7 +170,7 @@ const MenuBar = ({ children }) => {
   );
 };
 
-function MenuDropdown({ anchorEl, setAnchorEl, displayName }) {
+function MenuDropdown({ anchorEl, setAnchorEl, displayName, profileSlug }) {
   const { publicRuntimeConfig } = getConfig();
   const parentClasses = useParentStyles();
   const handleClose = () => {
@@ -186,11 +196,7 @@ function MenuDropdown({ anchorEl, setAnchorEl, displayName }) {
       transformOrigin={{ vertical: "top", horizontal: "center" }}
     >
       <MenuItem onClick={handleClose}>
-        <Link
-          href="/user/[name]"
-          as={`/user/${displayName.replace(" ", "-")}`}
-          passHref
-        >
+        <Link href="/user/[slug]" as={`/user/${profileSlug}`} passHref>
           <a className={parentClasses.a}>{displayName}</a>
         </Link>
       </MenuItem>
