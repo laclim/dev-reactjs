@@ -50,7 +50,9 @@ export default function LoginDialog() {
   const { loggedIn } = useContextState();
   const githubLogin = () => {
     location.replace(
-      "https://github.com/login/oauth/authorize?client_id=4e6120fed050bc7dddb1"
+      `https://github.com/login/oauth/authorize?client_id=${
+        publicRuntimeConfig.GITHUB_CLIENT_ID || "4e6120fed050bc7dddb1"
+      }`
     );
   };
   const connectLinkedIn = () => {

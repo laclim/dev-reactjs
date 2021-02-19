@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import Posts from "../src/component/Posts";
 import TagList from "../src/component/TagList";
 import { GetServerSideProps } from "next";
+
 const GET_POSTS = gql`
   query {
     posts {
@@ -69,16 +70,12 @@ function Index() {
     <React.Fragment>
       <Container maxWidth="lg">
         <Grid container spacing={1}>
-          <Grid item lg={3}>
-            <Paper className={classes.paper}>
-              <Typography variant="h6">Trending Tags</Typography>
-              {!loading && <TagList data={data?.tags}></TagList>}
-            </Paper>
-          </Grid>
-          <Grid item lg={7}>
+          <Grid item lg={10} xs={12}>
+            {!loading && <TagList data={data?.tags}></TagList>}
+
             {!loading && <Posts data={data?.posts}></Posts>}
           </Grid>
-          <Grid item lg={2}>
+          <Grid item lg={2} xs={12}>
             <Paper className={classes.paper}>g2</Paper>
           </Grid>
         </Grid>

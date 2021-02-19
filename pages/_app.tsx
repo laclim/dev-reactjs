@@ -8,7 +8,7 @@ import CustomSnackbar from "../src/component/CustomSnackbar";
 import Context, { useContextState } from "../src/context";
 import getConfig from "next/config";
 import { setContext } from "@apollo/client/link/context";
-
+import "./app.css";
 import Cookies from "universal-cookie";
 import {
   ApolloClient,

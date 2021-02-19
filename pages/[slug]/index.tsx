@@ -3,7 +3,14 @@ import { GetServerSideProps, GetStaticProps } from "next";
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo } from "../../src/component/config/apollo";
 
-import { Box, Button, Container, Typography, Avatar } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  Avatar,
+  IconButton,
+} from "@material-ui/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { jsonToHTML } from "../../src/jsonToHTML";
@@ -12,6 +19,8 @@ import Comment from "../../src/component/Comment";
 import theme from "../../src/component/Theme/lightTheme";
 import { getS3Image } from "../../src/helper";
 import Error from "next/error";
+import BookmarkButton from "../../src/component/BookmarkButton";
+
 // import { gqlClient } from "../src/component/config/apollo";
 const GET_POST = gql`
   query getPost($slug: String!) {
@@ -27,6 +36,7 @@ const GET_POST = gql`
         name
         profileImage
       }
+      isBookmarked
       createdAt
       updatedAt
     }
@@ -57,6 +67,10 @@ function Post(props: { post: any; isEditPost: any; statusCode: any }) {
             <Button color="secondary">Edit</Button>
           </Link>
         )}
+        <BookmarkButton
+          isBookmarked={post.isBookmarked}
+          postID={post.id}
+        ></BookmarkButton>
         <Typography variant="h1">{post?.title}</Typography>
         <Avatar
           alt={post?.createdBy.name}
@@ -98,11 +112,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .then((data: { data: { post: any; isEditPost: any } }) => {
       post = data.data.post;
       isEditPost = data.data.isEditPost;
+      console.log(post);
       if (!post) {
         statusCode = 404;
       }
     })
-    .catch(() => {
+    .catch((e) => {
+      console.log(e);
       statusCode = 404;
       console.log(post, isEditPost, statusCode);
     });

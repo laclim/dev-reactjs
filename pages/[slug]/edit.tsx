@@ -93,6 +93,7 @@ function EditPost({ post, isEditPost }) {
         title={post.title}
         setTagList={setTagList}
         tagList={tagList}
+        errors={errors}
       >
         <React.Fragment>
           <div className={classes.buttons}>

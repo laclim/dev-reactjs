@@ -31,6 +31,7 @@ import { SingleEditInput } from "../../src/component/SingleEditInput";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import theme from "../../src/component/Theme/darkTheme";
+import Posts from "../../src/component/Posts";
 const PROFILE = gql`
   query($slug: String) {
     profile(slug: $slug) {
@@ -50,6 +51,10 @@ const PROFILE = gql`
         title
         createdAt
         updatedAt
+        createdBy {
+          name
+          profileImage
+        }
         slug
         content
         description
@@ -71,7 +76,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Profile({ profile, statusCode }) {
+function Profile({ profile, statusCode, posts }) {
   const classes = useStyles();
 
   if (statusCode) {
@@ -95,7 +100,7 @@ function Profile({ profile, statusCode }) {
               <Typography variant="body2" color="textSecondary" component="p">
                 {profile.biodata}
               </Typography>
-              {profile.publishedPostCount} articles published
+              {profile.publishedPostCount} post published
             </CardContent>
           </CardActionArea>
           <CardActions>
@@ -107,6 +112,8 @@ function Profile({ profile, statusCode }) {
             </Button>
           </CardActions>
         </Card>
+        <Typography variant="h1">Published Post</Typography>
+        <Posts data={posts}></Posts>
       </React.Fragment>
     );
   }
@@ -115,6 +122,7 @@ function Profile({ profile, statusCode }) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // Fetch data from external API
   let profile = null;
+  let posts = null;
   let statusCode = null;
   const { slug } = context.params;
   const apolloClient = initializeApollo(context);
@@ -124,11 +132,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       variables: { slug },
     })
     .then((res) => {
-      if (res?.data.profile) profile = res?.data?.profile;
-      else statusCode = 404;
-      console.log(profile);
+      if (res?.data?.profile) {
+        profile = res?.data?.profile;
+        posts = res.data.profile.posts;
+        console.log(posts);
+      } else {
+        statusCode = 404;
+      }
     })
-    .catch(() => {
+    .catch((e) => {
+      console.log(e);
       statusCode = 404;
     });
 
@@ -136,6 +149,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       profile,
       statusCode,
+      posts,
     },
   };
 };

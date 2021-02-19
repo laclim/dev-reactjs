@@ -20,6 +20,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { getS3Image } from "../helper";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -74,11 +75,6 @@ function PostCard({ post }) {
           >
             {post.createdBy.name.charAt(0).toUpperCase()}
           </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
         }
         title={post.createdBy.name}
         subheader={dayjs(post.createdAt).format("D MMM hh:mm a")}
