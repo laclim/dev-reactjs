@@ -16,22 +16,13 @@ function TagList({ data }) {
 
   return (
     <React.Fragment>
-      <ScrollMenu
-        data={list}
-        arrowLeft={ArrowLeft}
-        arrowRight={ArrowRight}
-        scrollToSelected={false}
-        translate={0}
-        transition={0.3}
-        innerWrapperStyle={
-          {
-            // transform: "translate3d(0.148438px, 0px, 0px)",
-            // textAlign: "left",
-            // transition: "transform 0.4s ease 0s",
-            // whiteSpace: "nowrap",
-          }
-        }
-      ></ScrollMenu>
+      <Box display="flex" flexWrap="wrap">
+        {data?.map((tag, i) => (
+          <React.Fragment>
+            <Tag tag={tag} key={i}></Tag>
+          </React.Fragment>
+        ))}
+      </Box>
     </React.Fragment>
   );
 }

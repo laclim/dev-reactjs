@@ -135,7 +135,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       if (res?.data?.profile) {
         profile = res?.data?.profile;
         posts = res.data.profile.posts;
-        console.log(posts);
       } else {
         statusCode = 404;
       }

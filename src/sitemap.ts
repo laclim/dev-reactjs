@@ -13,9 +13,7 @@ const client = new ApolloClient({
   uri: "https://jobinsiderblog.com/graphql",
   cache: new InMemoryCache(),
 });
-client.query({ query: GET_TAGS }).then((res) => {
-  console.log(res.data);
-});
+
 // const BUILD_ID = fs.readFileSync(".next/BUILD_ID").toString();
 sitemap({
   baseUrl: "https://jobinsiderblog.com",

@@ -63,7 +63,6 @@ function Index() {
   });
 
   const onSubmit = (data) => {
-    console.log(content);
     data = { ...data, content, tag: tagList, status: true };
 
     addPost({ variables: { input: data } }).then((res) => {

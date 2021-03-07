@@ -50,7 +50,7 @@ function Editor({
         deleted.push(el);
       }
     });
-    // console.log(tagList);
+
     setTagList(deleted);
     console.info("You clicked the delete icon.");
   };

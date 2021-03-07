@@ -33,6 +33,7 @@
     "react-horizontal-scrolling-menu": "^0.7.9",
     "react-lazyload": "^3.1.0",
     "react-svg-loader": "^3.0.3",
+    "socket.io-client": "^3.1.2",
     "styled-components": "^5.1.1",
     "universal-cookie": "^4.0.4"
   },

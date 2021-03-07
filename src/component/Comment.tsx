@@ -112,11 +112,13 @@ import SendIcon from "@material-ui/icons/Send";
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import { getS3Image } from "../helper";
 import { useState } from "react";
+import { useContextDispatch } from "../context";
 function Comment({ postID }) {
   const [skip, setSkip] = useState(0);
   const [getComments, { loading, error, data }] = useLazyQuery(GET_COMMENT);
   const [commentList, setCommentList] = useState([]);
   const [parentComment, setParentComment] = useState("");
+  const dispatch = useContextDispatch();
   useEffect(() => {
     getComments({
       variables: { id: postID, limit: 5, skip: skip },
@@ -140,12 +142,14 @@ function Comment({ postID }) {
   };
   const [addComment] = useMutation(ADD_COMMENT);
   const handleAddComment = () => {
-    addComment({ variables: { content: parentComment, post: postID } }).then(
-      (res) => {
+    addComment({ variables: { content: parentComment, post: postID } })
+      .then((res) => {
         setCommentList([res.data.createComment, ...commentList]);
         setParentComment("");
-      }
-    );
+      })
+      .catch(() => {
+        dispatch({ type: "toggleLoginDialog", force: false });
+      });
   };
   const setCommentReplyTextField = (id, status) => {
     const d = commentList.map((el) => {
@@ -366,16 +370,8 @@ const useStylesReddit = makeStyles((theme: Theme) =>
       border: "1px solid #e2e2e1",
       overflow: "hidden",
       borderRadius: 4,
-      backgroundColor: "#fcfcfb",
+      backgroundColor: theme.palette.primary.light,
       transition: theme.transitions.create(["border-color", "box-shadow"]),
-      "&:hover": {
-        backgroundColor: "#fff",
-      },
-      "&$focused": {
-        backgroundColor: "#fff",
-        boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-        borderColor: theme.palette.primary.main,
-      },
     },
     focused: {},
   })

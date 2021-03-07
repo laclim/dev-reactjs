@@ -8,7 +8,7 @@ export default async (req, res) => {
   const html = await response.text();
   const doc = domino.createWindow(html).document;
   const metadata = getMetadata(doc, url);
-  console.log(metadata);
+
   metadata.image = { url: metadata.image };
   const data = {
     success: 1,

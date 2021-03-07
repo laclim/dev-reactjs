@@ -64,7 +64,7 @@ function Index() {
   const { loading, error, data } = useQuery(GET_POSTS);
   // if (loading) return <React.Fragment>Loading...</React.Fragment>;
   // if (error) return <React.Fragment>Error! {error.message}</React.Fragment>;
-  if (!loading) console.log(data);
+
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -72,7 +72,6 @@ function Index() {
         <Grid container spacing={1}>
           <Grid item lg={10} xs={12}>
             {!loading && <TagList data={data?.tags}></TagList>}
-
             {!loading && <Posts data={data?.posts}></Posts>}
           </Grid>
           <Grid item lg={2} xs={12}>

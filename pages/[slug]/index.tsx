@@ -112,7 +112,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .then((data: { data: { post: any; isEditPost: any } }) => {
       post = data.data.post;
       isEditPost = data.data.isEditPost;
-      console.log(post);
+
       if (!post) {
         statusCode = 404;
       }
