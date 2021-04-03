@@ -75,6 +75,38 @@ const useStyles = (props) => {
       border: 0,
       padding: 0,
     },
+    cdx_list: {
+      margin: 0,
+      paddingLeft: "40px",
+      outline: "none",
+      listStyle: props.listStyle == "unordered" ? "disc" : "decimal",
+    },
+    cdx_list__item: {
+      padding: "5.5px 0 5.5px 3px",
+      lineHeight: "1.6em",
+    },
+    ce_code__textarea: {
+      minHeight: "200px",
+      fontFamily: "Menlo, Monaco, Consolas, Courier New, monospace",
+      color: "#41314e",
+      lineHeight: "1.6em",
+      fontSize: "12px",
+      background: "#f8f7fa",
+      border: "1px solid #f1f1f4",
+      boxShadow: "none",
+      whiteSpace: "pre",
+      wordWrap: "normal",
+      overflowX: "auto",
+      resize: "vertical",
+      borderRadius: "3px",
+      padding: "10px 12px",
+      outline: "none",
+      width: "100%",
+      WebkitBoxSizing: "border-box",
+    },
+    cdx_block: {
+      padding: ".4em 0",
+    },
   }));
 };
 
@@ -86,6 +118,7 @@ function parseBlock(block: any, index: number) {
   const classes = useStyles({
     stretched: block.data?.stretched,
     withBackground: block.data?.withBackground,
+    listStyle: block.data?.style,
   })();
   let el = null;
   switch (block.type) {
@@ -111,7 +144,7 @@ function parseBlock(block: any, index: number) {
       break;
     case "paragraph":
       // el = <p>{block.data.text}</p>;
-      el = <p dangerouslySetInnerHTML={createMarkup(block.data.text)} />;
+      el = <div dangerouslySetInnerHTML={createMarkup(block.data.text)}></div>;
       break;
     case "heading":
       const { level, text } = block.data;
@@ -163,6 +196,23 @@ function parseBlock(block: any, index: number) {
           </a>
         </React.Fragment>
       );
+      break;
+    case "list":
+      el = (
+        <React.Fragment>
+          <ul className={classes.cdx_list}>
+            {block?.data?.items.map((el, i) => (
+              <li key={i} className={classes.cdx_list__item}>
+                <div dangerouslySetInnerHTML={createMarkup(el)}></div>
+              </li>
+            ))}
+          </ul>
+        </React.Fragment>
+      );
+      break;
+
+    case "code":
+      el = <div className={classes.ce_code__textarea}>{block.data?.code}</div>;
       break;
     // case "image":
     //   break;

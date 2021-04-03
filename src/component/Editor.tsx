@@ -76,7 +76,7 @@ function Editor({
                 name="title"
                 inputRef={register({ required: true })}
                 label="Title"
-                value={title}
+                // value={title}
                 fullWidth
                 onChange={(e) => setCurrentLength(e.target.value.length)}
                 helperText={errors?.title && "This field is required"}

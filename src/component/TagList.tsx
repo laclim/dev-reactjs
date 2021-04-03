@@ -18,9 +18,7 @@ function TagList({ data }) {
     <React.Fragment>
       <Box display="flex" flexWrap="wrap">
         {data?.map((tag, i) => (
-          <React.Fragment>
-            <Tag tag={tag} key={i}></Tag>
-          </React.Fragment>
+          <Tag tag={tag} key={i}></Tag>
         ))}
       </Box>
     </React.Fragment>
