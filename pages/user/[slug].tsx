@@ -32,36 +32,7 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import theme from "../../src/component/Theme/darkTheme";
 import Posts from "../../src/component/Posts";
-const PROFILE = gql`
-  query($slug: String) {
-    profile(slug: $slug) {
-      email
-      name
-      profileImage
-      biodata
-      createdAt
-      slug
-      publishedPostCount
-      link {
-        github
-        linkedIn
-      }
-      posts {
-        id
-        title
-        createdAt
-        updatedAt
-        createdBy {
-          name
-          profileImage
-        }
-        slug
-        content
-        description
-      }
-    }
-  }
-`;
+import { PROFILE } from "../../api";
 
 const useStyles = makeStyles({
   root: {
@@ -76,7 +47,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Profile({ profile, statusCode, posts }) {
+function ProfilePage({ profile, statusCode, posts }) {
   const classes = useStyles();
 
   if (statusCode) {
@@ -153,4 +124,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default Profile;
+export default ProfilePage;
