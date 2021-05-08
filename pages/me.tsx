@@ -6,6 +6,12 @@ import {
   makeStyles,
   Avatar,
   Box,
+  Drawer,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@material-ui/core";
 import { GetServerSideProps } from "next";
 import React, { useEffect } from "react";
@@ -21,7 +27,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { SingleEditInput } from "../src/component/SingleEditInput";
-
+import clsx from "clsx";
 const ME = gql`
   query {
     me {
@@ -85,6 +91,30 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     background: "rgba(0,0,0,.48)",
   },
+  drawerOpen: {
+    width: 240,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: "hidden",
+    width: theme.spacing(7) + 1,
+    [theme.breakpoints.up("sm")]: {
+      width: theme.spacing(9) + 1,
+    },
+  },
+  drawer: {
+    width: 240,
+    flexShrink: 0,
+    whiteSpace: "nowrap",
+  },
+  toolbar: theme.mixins.toolbar,
 }));
 
 function useEditableInput({ defaultValue, name }) {
@@ -177,6 +207,38 @@ function Me({ me, statusCode }) {
   }
   return (
     <React.Fragment>
+      <Drawer
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        })}
+        classes={{
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <div className={classes.toolbar} />
+        <Divider />
+        <List>
+          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {["All mail", "Trash", "Spam"].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
       <Paper className={parent_classes.paper}>
         <Box display="flex">
           <Box flexGrow={1} fontWeight={700}>

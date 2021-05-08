@@ -20,6 +20,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { getS3Image } from "../helper";
+import SubLink from "./SubLink";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,9 +77,14 @@ function PostCard({ post }) {
             {post.createdBy.name.charAt(0).toUpperCase()}
           </Avatar>
         }
-        title={post.createdBy.name}
+        title={
+          <SubLink subdomain={post.createdBy.name} style={{ color: "#000000" }}>
+            {post.createdBy.name}
+          </SubLink>
+        }
         subheader={dayjs(post.createdAt).format("D MMM hh:mm a")}
       />
+
       {/* <CardMedia
         className={classes.media}
         image="/static/images/cards/paella.jpg"

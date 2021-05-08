@@ -33,6 +33,7 @@ import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import theme from "../../src/component/Theme/darkTheme";
 import Posts from "../../src/component/Posts";
 import { PROFILE } from "../../api";
+import Head from "next/head";
 
 const useStyles = makeStyles({
   root: {
@@ -55,6 +56,9 @@ function ProfilePage({ profile, statusCode, posts }) {
   } else {
     return (
       <React.Fragment>
+        <Head>
+          <title>{profile.name} - JobInsider</title>
+        </Head>
         <Card>
           <CardActionArea>
             <Box p={2}>

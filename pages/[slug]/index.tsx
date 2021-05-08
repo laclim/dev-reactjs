@@ -103,7 +103,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const apolloClient = initializeApollo(context);
   let post, isEditPost, statusCode;
   post = isEditPost = statusCode = null;
-
+  const host = context.req.headers.host;
+  var patt1 = /(.*?)\.[a-z0-9]+(.com|:)/;
+  var result = host.match(patt1); 
+  let user = null;
+  if (result) {
+    user = result[1];
+  }
   await apolloClient
     .query({
       query: GET_POST,

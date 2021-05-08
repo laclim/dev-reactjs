@@ -13,7 +13,8 @@ module.exports = withImages({
     CLOUDFRONT_URL: process.env.CLOUDFRONT_URL,
     RESIZE_CLOUDFRONT_URL: process.env.RESIZE_CLOUDFRONT_URL,
     COOKIES_DOMAIN: process.env.COOKIES_DOMAIN,
-    GITHUB_CLIENT_ID:process.env.GITHUB_CLIENT_ID
+    GITHUB_CLIENT_ID:process.env.GITHUB_CLIENT_ID,
+    APP_DOMAIN:process.env.APP_DOMAIN
   },
   exclude: path.resolve(__dirname, 'src/images/svg'),
   webpack(config, options) {
